@@ -3,3 +3,7 @@
 ################################################################################
 
 /.vs/FutuEvents
+/FutuEvents/appsettings.Development.json
+/FutuEvents/appsettings.json
+/FutuEvents/obj/Debug/net8.0/FutuEvents.AssemblyInfo.cs
+/FutuEvents/obj/Debug/net8.0/FutuEvents.AssemblyInfoInputs.cache
