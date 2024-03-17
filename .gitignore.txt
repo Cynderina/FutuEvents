@@ -3,3 +3,9 @@
 
 # ignore appsettings
 appsettings*
+
+# ignore bin
+bin*
+
+# ignore obj folder
+obj*

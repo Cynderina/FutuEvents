@@ -102,3 +102,4 @@ C:\Users\Katri\source\repos\FutuEvents\FutuEvents\obj\Debug\net8.0\refint\FutuEv
 C:\Users\Katri\source\repos\FutuEvents\FutuEvents\obj\Debug\net8.0\FutuEvents.pdb
 C:\Users\Katri\source\repos\FutuEvents\FutuEvents\obj\Debug\net8.0\FutuEvents.genruntimeconfig.cache
 C:\Users\Katri\source\repos\FutuEvents\FutuEvents\obj\Debug\net8.0\ref\FutuEvents.dll
+C:\Users\Katri\source\repos\FutuEvents\FutuEvents\obj\Debug\net8.0\FutuEvents.sourcelink.json

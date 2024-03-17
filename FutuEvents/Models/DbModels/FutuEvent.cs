@@ -10,7 +10,5 @@ namespace FutuEvents.Models.DbModels
         public long Id { get; set; }
         [Column("name")]
         public string Name { get; set; }
-        [Column("date_options")]
-        public string DateOptions { get; set; }
     }
 }
