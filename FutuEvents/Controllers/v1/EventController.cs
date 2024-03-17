@@ -7,7 +7,7 @@ using FutuEvents.Services;
 
 namespace FutuEvents.Controllers.v1
 {
-    [Route("api/[controller]")]
+    [Route("api/v1/[controller]")]
     [ApiController]
     public class EventController : ControllerBase
     {
@@ -19,6 +19,7 @@ namespace FutuEvents.Controllers.v1
         }
 
         // Get
+        [Route("list")]
         [HttpGet]
         public JsonResult Get()
         {
