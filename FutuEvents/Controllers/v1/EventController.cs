@@ -35,7 +35,7 @@ namespace FutuEvents.Controllers.v1
 
         // Create
         [HttpPost]
-        public JsonResult Create(ApiFutuEvent futuEvent)
+        public JsonResult Create(ApiCreateFutuEvent futuEvent)
         {
             var id = EventService.CreateEvent(_context, futuEvent);
 
@@ -45,6 +45,21 @@ namespace FutuEvents.Controllers.v1
             }
 
             return new JsonResult(Ok($"id:  { id }"));
+        }
+
+        // Get
+        [Route("{id}")]
+        [HttpGet]
+        public JsonResult Get(long id)
+        {
+            var result = EventService.GetFutuEvent(_context, id);
+
+            if (result == null)
+            {
+                return new JsonResult(NotFound("There were no events to return"));
+            }
+
+            return new JsonResult(Ok(result));
         }
     }
 }
