@@ -47,7 +47,7 @@ namespace FutuEvents.Controllers.v1
             return new JsonResult(Ok($"id:  { id }"));
         }
 
-        // Get
+        // Get one event
         [Route("{id}")]
         [HttpGet]
         public JsonResult Get(long id)
@@ -57,6 +57,21 @@ namespace FutuEvents.Controllers.v1
             if (result == null)
             {
                 return new JsonResult(NotFound("There were no events to return"));
+            }
+
+            return new JsonResult(Ok(result));
+        }
+
+        // Add vote for an event
+        [Route("{id}/vote")]
+        [HttpPost]
+        public JsonResult Vote(long id, ApiCreateVote vote)
+        {
+            var result = EventService.AddVote(_context, id, vote);
+
+            if (result == null)
+            {
+                return new JsonResult(BadRequest("There was error in adding the vote"));
             }
 
             return new JsonResult(Ok(result));

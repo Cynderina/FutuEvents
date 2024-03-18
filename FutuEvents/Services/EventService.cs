@@ -91,6 +91,37 @@ namespace FutuEvents.Services
             return result;
         }
 
+        public static ApiGetFutuEvent AddVote(ApiContext context, long id, ApiCreateVote vote)
+        {
+            FutuEvent? futuEvent = context.FutuEvents.Where(x => x.Id == id).FirstOrDefault();
+            List<PossibleDate> dates = context.PossibleDates.Where(x => x.EventId == id).ToList();
+            List<DateTime> suggestedDates = dates.Select(x => x.SuggestedDate).ToList();
+
+            Vote voteToBeAdded = new Vote { EventId = id, Name = vote.Name };
+
+            context.Votes.Add(voteToBeAdded);
+            context.SaveChanges();
+
+            foreach (var item in vote.Votes)
+            {
+                if (suggestedDates.Contains(item))
+                {
+                    VotedDay voteDayToBeAdded = new VotedDay
+                    {
+                        EventId = id,
+                        VoteId = voteToBeAdded.Id,
+                        DateId = dates.Where(x => x.SuggestedDate == item).FirstOrDefault().Id
+                    };
+
+                    context.VotedDays.Add(voteDayToBeAdded);
+                }
+            }
+
+            context.SaveChanges();
+
+            return GetFutuEvent(context, id);
+        }
+
         public static ApiGetVote GetVotes(ApiContext context, FutuEvent futuEvent)
         {
             ApiGetVote result = new ApiGetVote();
