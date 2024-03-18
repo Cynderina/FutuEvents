@@ -76,5 +76,20 @@ namespace FutuEvents.Controllers.v1
 
             return new JsonResult(Ok(result));
         }
+
+        // Show results of an event
+        [Route("{id}/results")]
+        [HttpGet]
+        public JsonResult Results(long id)
+        {
+            var result = EventService.GetResult(_context, id);
+
+            if (result == null)
+            {
+                return new JsonResult(NotFound("No event was found"));
+            }
+
+            return new JsonResult(Ok(result));
+        }
     }
 }

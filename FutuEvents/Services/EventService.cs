@@ -122,10 +122,26 @@ namespace FutuEvents.Services
             return GetFutuEvent(context, id);
         }
 
-        public static ApiGetVote GetVotes(ApiContext context, FutuEvent futuEvent)
+        public static ApiEventResult GetResult(ApiContext context, long id)
         {
-            ApiGetVote result = new ApiGetVote();
-            
+            ApiGetFutuEvent futuEvent = GetFutuEvent(context, id);
+
+            ApiEventResult result = new ApiEventResult();
+            result.SuitableDates = new List<ApiGetVote>();
+
+            result.Id = futuEvent.Id;
+            result.Name = futuEvent.Name;
+
+            List<Vote> votes = context.Votes.Where(x => x.EventId == futuEvent.Id).ToList();
+            int voteAmount = votes.Count();
+
+            foreach (var vote in futuEvent.Votes)
+            {
+                if (vote.People.Count() == voteAmount)
+                {
+                    result.SuitableDates.Add(vote);
+                }
+            }
 
             return result;
         }
