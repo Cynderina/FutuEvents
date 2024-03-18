@@ -2,6 +2,7 @@
 using FutuEvents.Models.ApiModels;
 using FutuEvents.Models.DbModels;
 using Microsoft.EntityFrameworkCore;
+using System.Globalization;
 using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace FutuEvents.Services
@@ -49,11 +50,11 @@ namespace FutuEvents.Services
             result.Id = futuEvent.Id;
             result.Name = futuEvent.Name;
 
-            result.Dates = new List<DateTime>();
+            result.Dates = new List<string>();
 
             foreach (var date in dates)
             {
-                result.Dates.Add(date.SuggestedDate);
+                result.Dates.Add(date.SuggestedDate.ToString("yyyy-MM-dd", CultureInfo.InvariantCulture));
             }
 
             List<Vote> votes = context.Votes.Where(x => x.EventId == futuEvent.Id).ToList();
@@ -71,7 +72,7 @@ namespace FutuEvents.Services
                     ApiGetVote vote = new ApiGetVote();
                     vote.People = new List<string>();
 
-                    vote.Date = date.SuggestedDate;
+                    vote.Date = date.SuggestedDate.ToString("yyyy-MM-dd", CultureInfo.InvariantCulture);
 
 
                     var votesForTheDay = votedDays.Where(x => x.DateId == date.Id);
