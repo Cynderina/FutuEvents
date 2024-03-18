@@ -3,13 +3,12 @@ using FutuEvents.Models.ApiModels;
 using FutuEvents.Models.DbModels;
 using Microsoft.EntityFrameworkCore;
 using System.Globalization;
-using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace FutuEvents.Services
 {
     public class EventService
     {
-        public static int? CreateEvent(ApiContext context, ApiCreateFutuEvent futuEvent)
+        public static FutuEvent? CreateEvent(ApiContext context, ApiCreateFutuEvent futuEvent)
         {
             if (futuEvent == null)
             {
@@ -36,7 +35,7 @@ namespace FutuEvents.Services
 
                 context.SaveChanges();
 
-                return (int?)toBeAdded.Id;
+                return toBeAdded;
             }
         }
 

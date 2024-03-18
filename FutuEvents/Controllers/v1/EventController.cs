@@ -23,28 +23,47 @@ namespace FutuEvents.Controllers.v1
         [HttpGet]
         public JsonResult Get()
         {
-            var result = _context.FutuEvents;
-
-            if (result == null)
+            try
             {
-                return new JsonResult(NotFound("There were no events to return"));
-            }
+                var result = _context.FutuEvents;
 
-            return new JsonResult(Ok(result));
+                if (result == null)
+                {
+                    return new JsonResult(NotFound("There were no events to return"));
+                }
+
+                return new JsonResult(Ok(result));
+            }
+            catch (Exception ex)
+            {
+
+                return new JsonResult(BadRequest($"There was an error getting the event list. {ex.Message}"));
+            }
+            
         }
 
         // Create
         [HttpPost]
         public JsonResult Create(ApiCreateFutuEvent futuEvent)
         {
-            var id = EventService.CreateEvent(_context, futuEvent);
-
-            if (id == null)
+            if (futuEvent == null)
             {
-                return new JsonResult(BadRequest("Saving the event failed. Check the sent event info"));
+                return new JsonResult(BadRequest("The event info is null. There is nothing to save."));
             }
 
-            return new JsonResult(Ok($"id:  { id }"));
+            try
+            {
+                var createdEvent = EventService.CreateEvent(_context, futuEvent);
+
+                ApiEventBase result = new ApiEventBase { Id = createdEvent.Id };
+
+                return new JsonResult(Ok(result));
+            }
+            catch (Exception ex)
+            {
+
+                return new JsonResult(BadRequest($"There was an error creating the event. {ex.Message}"));
+            }
         }
 
         // Get one event
@@ -52,14 +71,22 @@ namespace FutuEvents.Controllers.v1
         [HttpGet]
         public JsonResult Get(long id)
         {
-            var result = EventService.GetFutuEvent(_context, id);
-
-            if (result == null)
+            try
             {
-                return new JsonResult(NotFound("There were no events to return"));
-            }
+                var result = EventService.GetFutuEvent(_context, id);
 
-            return new JsonResult(Ok(result));
+                if (result == null)
+                {
+                    return new JsonResult(NotFound("There were no events to return"));
+                }
+
+                return new JsonResult(Ok(result));
+            }
+            catch (Exception ex)
+            {
+
+                return new JsonResult(BadRequest($"There was an error getting the event. {ex.Message}"));
+            }
         }
 
         // Add vote for an event
@@ -67,14 +94,22 @@ namespace FutuEvents.Controllers.v1
         [HttpPost]
         public JsonResult Vote(long id, ApiCreateVote vote)
         {
-            var result = EventService.AddVote(_context, id, vote);
-
-            if (result == null)
+            try
             {
-                return new JsonResult(BadRequest("There was error in adding the vote"));
-            }
+                var result = EventService.AddVote(_context, id, vote);
 
-            return new JsonResult(Ok(result));
+                if (result == null)
+                {
+                    return new JsonResult(BadRequest("There was error in adding the vote"));
+                }
+
+                return new JsonResult(Ok(result));
+            }
+            catch (Exception ex)
+            {
+                return new JsonResult(BadRequest($"There was an error adding the vote. {ex.Message}"));
+            }
+            
         }
 
         // Show results of an event
@@ -82,14 +117,23 @@ namespace FutuEvents.Controllers.v1
         [HttpGet]
         public JsonResult Results(long id)
         {
-            var result = EventService.GetResult(_context, id);
-
-            if (result == null)
+            try
             {
-                return new JsonResult(NotFound("No event was found"));
-            }
+                var result = EventService.GetResult(_context, id);
 
-            return new JsonResult(Ok(result));
+                if (result == null)
+                {
+                    return new JsonResult(NotFound("No event was found"));
+                }
+
+                return new JsonResult(Ok(result));
+            }
+            catch (Exception ex)
+            {
+
+                return new JsonResult(BadRequest($"There was an error generating the event results. {ex.Message}"));
+            }
+            
         }
     }
 }
