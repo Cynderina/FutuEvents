@@ -16,18 +16,20 @@ namespace FutuEvents.Controllers.v1
             _context = context;
         }
 
-        // Get
+        // Get list of all the events
         [Route("list")]
         [HttpGet]
         public JsonResult Get()
         {
             try
             {
+                // Could also include limits and pagination
+                // Fetching all the vents from db
                 var result = _context.FutuEvents;
 
                 if (result == null)
                 {
-                    return new JsonResult(NotFound("There were no events to return"));
+                    return new JsonResult(NotFound("There were no events to return."));
                 }
 
                 return new JsonResult(Ok(result));
@@ -40,7 +42,7 @@ namespace FutuEvents.Controllers.v1
             
         }
 
-        // Create
+        // Create new event
         [HttpPost]
         public JsonResult Create(ApiCreateFutuEvent futuEvent)
         {
@@ -52,6 +54,11 @@ namespace FutuEvents.Controllers.v1
             try
             {
                 var createdEvent = EventService.CreateEvent(_context, futuEvent);
+
+                if (createdEvent == null)
+                {
+                    return new JsonResult(BadRequest($"There was an error creating the event."));
+                }
 
                 ApiEventBase result = new ApiEventBase { Id = createdEvent.Id };
 
@@ -110,7 +117,7 @@ namespace FutuEvents.Controllers.v1
             
         }
 
-        // Show results of an event
+        // Show all suitable dates for all the voters for requested event
         [Route("{id}/results")]
         [HttpGet]
         public JsonResult Results(long id)

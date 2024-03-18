@@ -12,10 +12,20 @@ namespace FutuEvents.Services
         {
             if (futuEvent == null)
             {
-                return null;
+                throw new Exception("The event info was empty.");
             }
             else
             {
+                if (string.IsNullOrEmpty(futuEvent.Name) || string.IsNullOrWhiteSpace(futuEvent.Name))
+                {
+                    throw new Exception("The event name was empty.");
+                }
+
+                if (!futuEvent.Dates.Any())
+                {
+                    throw new Exception("The event is missing suggested dates.");
+                }
+
                 FutuEvent toBeAdded = new FutuEvent
                 {
                     Name = futuEvent.Name
@@ -39,12 +49,21 @@ namespace FutuEvents.Services
             }
         }
 
-        public static ApiGetFutuEvent GetFutuEvent(ApiContext context, long id)
+        public static ApiGetFutuEvent? GetFutuEvent(ApiContext context, long id)
         {
             ApiGetFutuEvent result = new ApiGetFutuEvent();
-            // Think about exception handling
             FutuEvent? futuEvent = context.FutuEvents.Where(x => x.Id == id).FirstOrDefault();
             List<PossibleDate> dates = context.PossibleDates.Where(x => x.EventId == id).ToList();
+
+            if (futuEvent == null)
+            {
+                return null;
+            }
+            
+            if (dates == null)
+            {
+                throw new Exception("No possible dates for the event found.");
+            }
             
             result.Id = futuEvent.Id;
             result.Name = futuEvent.Name;
@@ -94,8 +113,28 @@ namespace FutuEvents.Services
         public static ApiGetFutuEvent AddVote(ApiContext context, long id, ApiCreateVote vote)
         {
             FutuEvent? futuEvent = context.FutuEvents.Where(x => x.Id == id).FirstOrDefault();
+            if (futuEvent == null)
+            {
+                throw new Exception("No event found with the id provided.");
+            }
+
             List<PossibleDate> dates = context.PossibleDates.Where(x => x.EventId == id).ToList();
+            if (dates == null)
+            {
+                throw new Exception("No possible dates for the event found.");
+            }
+
             List<DateTime> suggestedDates = dates.Select(x => x.SuggestedDate).ToList();
+
+            if (string.IsNullOrEmpty(vote.Name) || string.IsNullOrWhiteSpace(vote.Name))
+            {
+                throw new Exception("The name provided with the vote is empty.");
+            }
+
+            if (!vote.Votes.Any())
+            {
+                throw new Exception("Vote doesn't have any suitable dates.");
+            }
 
             Vote voteToBeAdded = new Vote { EventId = id, Name = vote.Name };
 
@@ -124,7 +163,11 @@ namespace FutuEvents.Services
 
         public static ApiEventResult GetResult(ApiContext context, long id)
         {
-            ApiGetFutuEvent futuEvent = GetFutuEvent(context, id);
+            ApiGetFutuEvent? futuEvent = GetFutuEvent(context, id);
+            if (futuEvent == null)
+            {
+                throw new Exception("The requested event was not found.");
+            }
 
             ApiEventResult result = new ApiEventResult();
             result.SuitableDates = new List<ApiGetVote>();
