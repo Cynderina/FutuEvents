@@ -1,7 +1,5 @@
 ﻿using FutuEvents.Data;
 using FutuEvents.Models.ApiModels;
-using FutuEvents.Models.DbModels;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using FutuEvents.Services;
 

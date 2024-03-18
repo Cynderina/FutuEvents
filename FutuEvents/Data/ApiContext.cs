@@ -1,6 +1,5 @@
 ﻿using FutuEvents.Models.DbModels;
 using Microsoft.EntityFrameworkCore;
-using System;
 
 namespace FutuEvents.Data
 {

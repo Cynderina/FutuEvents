@@ -1,5 +1,4 @@
-﻿using FutuEvents.Data;
-using System.ComponentModel.DataAnnotations.Schema;
+﻿using System.ComponentModel.DataAnnotations.Schema;
 
 namespace FutuEvents.Models.DbModels
 {
