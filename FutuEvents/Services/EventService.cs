@@ -142,9 +142,6 @@ namespace FutuEvents.Services
                 throw new Exception("No possible dates for the event found.");
             }
 
-            // Gathering the suggested dates in list
-            List<DateTime> suggestedDates = dates.Select(x => x.SuggestedDate).ToList();
-
             // Data validation for the vote that there is actual name and vote for days
             if (string.IsNullOrEmpty(vote.Name) || string.IsNullOrWhiteSpace(vote.Name))
             {
@@ -154,6 +151,19 @@ namespace FutuEvents.Services
             if (!vote.Votes.Any())
             {
                 throw new Exception("Vote doesn't have any suitable dates.");
+            }
+
+            // Gathering the suggested dates in list
+            List<DateTime> suggestedDates = dates.Select(x => x.SuggestedDate).ToList();
+
+            // Checking the dates if there are dates not suggested for event
+            foreach (var item in vote.Votes)
+            {
+                // Making sure that the vote and voted days are added only if they fir suggested dates
+                if (!suggestedDates.Contains(item))
+                {
+                    throw new Exception("Vote contained dates that are not suggested to event.");
+                }
             }
 
             // Adding vote to vote table and getting back VoteId after save
@@ -208,7 +218,7 @@ namespace FutuEvents.Services
 
             // Fetching votes for event to come up with the suitable date
             List<Vote> votes = context.Votes.Where(x => x.EventId == futuEvent.Id).ToList();
-            // Taking count on the votes. For in this case it is considered that everyone gets to vote for one day only once
+            // Taking count on the votes. For in this case it is considered that everyone gets to vote only once
             // so if there are 8 voters for the event then the suggested date having 8 voters is a suitable date
             int voteAmount = votes.Count();
 
