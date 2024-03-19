@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("FutuEvents")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+23f17a39c398b32f1712b5daf716be636068ec3a")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+64a2092b2c82e6c6707977f0c2728048bf683264")]
 [assembly: System.Reflection.AssemblyProductAttribute("FutuEvents")]
 [assembly: System.Reflection.AssemblyTitleAttribute("FutuEvents")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

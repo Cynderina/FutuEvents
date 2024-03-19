@@ -24,7 +24,7 @@ namespace FutuEvents.Controllers.v1
             try
             {
                 // Could also include limits and pagination
-                // Fetching all the vents from db
+                // Fetching all the events from db
                 var result = _context.FutuEvents;
 
                 if (result == null)
@@ -46,6 +46,7 @@ namespace FutuEvents.Controllers.v1
         [HttpPost]
         public JsonResult Create(ApiCreateFutuEvent futuEvent)
         {
+            // Making sure that the API is actually receiving an event to create
             if (futuEvent == null)
             {
                 return new JsonResult(BadRequest("The event info is null. There is nothing to save."));
@@ -53,20 +54,23 @@ namespace FutuEvents.Controllers.v1
 
             try
             {
+                // Proceeding to service and creating event
                 var createdEvent = EventService.CreateEvent(_context, futuEvent);
 
+                // Checking, that an actual event was created
                 if (createdEvent == null)
                 {
                     return new JsonResult(BadRequest($"There was an error creating the event."));
                 }
 
+                // Generating response object
                 ApiEventBase result = new ApiEventBase { Id = createdEvent.Id };
 
+                // Returning result as Json
                 return new JsonResult(Ok(result));
             }
             catch (Exception ex)
             {
-
                 return new JsonResult(BadRequest($"There was an error creating the event. {ex.Message}"));
             }
         }
@@ -78,13 +82,16 @@ namespace FutuEvents.Controllers.v1
         {
             try
             {
+                // Getting the event requested
                 var result = EventService.GetFutuEvent(_context, id);
 
+                // Making sure that result actually has an event to return
                 if (result == null)
                 {
-                    return new JsonResult(NotFound("There were no events to return"));
+                    return new JsonResult(NotFound("There were no event to return."));
                 }
 
+                // Returning the API response model as Json
                 return new JsonResult(Ok(result));
             }
             catch (Exception ex)
@@ -101,13 +108,16 @@ namespace FutuEvents.Controllers.v1
         {
             try
             {
+                // Adding vote and getting API result for response
                 var result = EventService.AddVote(_context, id, vote);
 
+                // Making sure that a result was gotten
                 if (result == null)
                 {
                     return new JsonResult(BadRequest("There was error in adding the vote"));
                 }
 
+                // Returning whole event info in response as json
                 return new JsonResult(Ok(result));
             }
             catch (Exception ex)
@@ -124,13 +134,16 @@ namespace FutuEvents.Controllers.v1
         {
             try
             {
+                // Getting the event info with suitable date. The date needs to fit everyone who has voted.
                 var result = EventService.GetResult(_context, id);
 
+                // Checking that there is a result to turn
                 if (result == null)
                 {
                     return new JsonResult(NotFound("No event was found"));
                 }
 
+                // Returning API result model as json
                 return new JsonResult(Ok(result));
             }
             catch (Exception ex)
